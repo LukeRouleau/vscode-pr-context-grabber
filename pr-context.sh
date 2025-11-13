@@ -114,18 +114,20 @@ fetch_remote_branches() {
     
     info "Fetching latest from remote..."
     
-    # Build refspecs for all branches
+    # Build refspecs for all branches (+ forces update even if non-fast-forward)
     local refspecs=()
     for branch in "${branches[@]}"; do
-        refspecs+=("refs/heads/${branch}:refs/remotes/origin/${branch}")
+        refspecs+=("+refs/heads/${branch}:refs/remotes/origin/${branch}")
     done
-    refspecs+=("refs/heads/${BASE_BRANCH}:refs/remotes/origin/${BASE_BRANCH}")
+    refspecs+=("+refs/heads/${BASE_BRANCH}:refs/remotes/origin/${BASE_BRANCH}")
     
-    # Just check exit code, ignore all output
-    if ! git fetch origin "${refspecs[@]}" >/dev/null 2>&1; then
-        error "Failed to fetch branches from remote"
+    # Capture stderr to see actual errors
+    local fetch_output
+    if ! fetch_output=$(git fetch origin "${refspecs[@]}" 2>&1); then
+        error "Failed to fetch branches from remote. Git output:
+$fetch_output"
     fi
-}    
+} 
 
 get_pr_info() {
     local repo_owner="$1"
