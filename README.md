@@ -28,18 +28,18 @@ Create `.vscode/tasks.json`:
     {
       "label": "Generate PR Context",
       "type": "shell",
-      "command": "${env:HOME}/scripts/pr-context",
-      "args": ["-o", "${env:HOME}/.pr-context/out.txt", "${input:branchNames}"],
+      "command": "/home/luke/scripts/pr-context -o /home/luke/.pr-context/out.txt ${input:branchNames}",
       "options": {
         "cwd": "${workspaceFolder}",
         "env": {
-          "GITHUB_TOKEN": "ghp_your_token_here"
+          "GITHUB_TOKEN": "<YOUR-GPG-TOKEN-HERE>"
         }
       },
       "presentation": {
         "reveal": "always",
         "panel": "shared"
-      }
+      },
+      "problemMatcher": []
     }
   ],
   "inputs": [
